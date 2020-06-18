@@ -36,7 +36,9 @@ export default function NavBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' className={classes.title}>
-            FakeBook
+            <Button color='inherit' component={Link} to='/'>
+              FakeBook
+            </Button>
           </Typography>
           <Button color='inherit' component={Link} to='/signin'>
             Login

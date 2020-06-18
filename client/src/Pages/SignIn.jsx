@@ -27,7 +27,7 @@ function Copyright() {
     </Typography>
   );
 }
-
+// ! TODO make usestyles global FIX
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(20),
@@ -62,6 +62,7 @@ function SignIn(props) {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setLoading(true);
+    //! TODO Axios call for submit
     setTimeout(() => {
       console.log('h1', { email, password });
       setLoading(false);

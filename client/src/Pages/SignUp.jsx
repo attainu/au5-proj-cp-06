@@ -10,6 +10,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function Copyright() {
   return (
@@ -26,7 +27,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(20),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
@@ -37,21 +38,27 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(1)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
+    position: 'relative'
+  },
+  progress: {
+    position: 'absolute'
   }
 }));
 
 export default function SignUp() {
   const classes = useStyles();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  // const [firstName, setFirstName] = useState('');
+  // const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [loading, setLoading] = useState(false);
-  // const [errors, setErrors] = useState({});
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [handle, setHandle] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -63,33 +70,6 @@ export default function SignUp() {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete='fname'
-                name='firstName'
-                variant='outlined'
-                required
-                fullWidth
-                id='firstName'
-                label='First Name'
-                autoFocus
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                id='lastName'
-                label='Last Name'
-                name='lastName'
-                autoComplete='lname'
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant='outlined'
@@ -127,6 +107,8 @@ export default function SignUp() {
                 type='password'
                 id='confirm-password'
                 autoComplete='current-password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -138,11 +120,18 @@ export default function SignUp() {
             className={classes.submit}
           >
             Sign Up
+            {
+              // ! TODO add a css animation for loading
+              loading && (
+                <CircularProgress size={30} className={classes.progress} />
+              )
+            }
           </Button>
           <Grid container justify='flex-end'>
             <Grid item>
+              {'Already have an account? '}
               <Link to='/signin' variant='body2'>
-                Already have an account? Sign in
+                Sign in
               </Link>
             </Grid>
           </Grid>
