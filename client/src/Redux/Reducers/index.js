@@ -5,6 +5,7 @@ import { logger } from 'redux-logger';
 import { AuthReducer } from './authReducer';
 import { PostReducer } from './postReducer';
 
+const initalState = {};
 const rootReducer = combineReducers({
   AuthReducer,
   PostReducer
@@ -16,6 +17,13 @@ if (process.env.NODE_ENV === `development`) {
   middlewares.push(logger);
 }
 
-let store = createStore(rootReducer, applyMiddleware(...middlewares));
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
+
+const enhancer = composeEnhancers(applyMiddleware(...middlewares));
+
+const store = createStore(rootReducer, initalState, enhancer);
 
 export default store;
