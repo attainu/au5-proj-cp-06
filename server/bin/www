@@ -25,7 +25,17 @@ const server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port, ()=> console.log(`serving at http://localhost:${port}`));
+server.listen(port, () => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log(
+      `serving ${process.env.NODE_ENV} mode at http://localhost:${port}`
+    );
+  } else {
+    console.log(
+      `serving ${process.env.NODE_ENV} mode at http://localhost:${port}`
+    );
+  }
+});
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -58,9 +68,7 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -83,8 +91,6 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
