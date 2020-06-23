@@ -4,8 +4,8 @@ const path = require('path');
 const logger = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+
+require('./configs/database');
 
 const app = express();
 
@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
 }
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/posts', require('./routes/posts'));
+app.use('/api/users', require('./routes/users'));
 
 //error handler
 app.use((err, req, res, next) => {
