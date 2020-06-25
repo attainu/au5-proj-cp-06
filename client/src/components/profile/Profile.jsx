@@ -74,7 +74,6 @@ const styles = (theme) => ({
 });
 
 const Profile = (props) => {
-  console.log(props);
   const {
     uploadImage,
     user: {
