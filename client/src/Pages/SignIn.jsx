@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -13,20 +18,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { connect } from 'react-redux';
+import Copyright from '../components/layouts/Copyright';
+import { loginUser } from '../Redux/ActionCreators';
 
-function Copyright() {
-  return (
-    <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright © '}
-      <Link color='inherit' to='/'>
-        FakeBook
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 // ! TODO make usestyles global FIX
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,25 +43,46 @@ const useStyles = makeStyles((theme) => ({
   },
   progress: {
     position: 'absolute'
+  },
+  customError: {
+    color: 'red',
+    fontSize: '0.8rem',
+    marginTop: 10,
+    textAlign: 'center'
   }
 }));
 
 function SignIn(props) {
+  const {
+    history,
+    loginUser,
+    UI: { loading, errors }
+  } = props;
+
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  // const [errors, setErrors] = useState({});
+  const [errors1, setErrors1] = useState({});
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    //! TODO Axios call for submit
-    setTimeout(() => {
-      console.log('h1', { email, password });
-      setLoading(false);
-    }, 3000);
+    const userData = {
+      email,
+      password
+    };
+    loginUser(userData, history);
   };
+  useEffect(() => {
+    let updated = true;
+    if (updated) {
+      setErrors1({ ...errors });
+    }
+    // * Cleanup function
+    return () => {
+      updated = false;
+    };
+  }, [errors]);
+
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
@@ -89,6 +104,8 @@ function SignIn(props) {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            helperText={errors1.email}
+            error={errors1.email ? true : false}
           />
           <TextField
             variant='outlined'
@@ -102,11 +119,18 @@ function SignIn(props) {
             autoComplete='current-password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            helperText={errors1.password}
+            error={errors1.password ? true : false}
           />
           <FormControlLabel
             control={<Checkbox value='remember' color='primary' />}
             label='Remember me'
           />
+          {errors1.general && (
+            <Typography variant='body2' className={classes.customError}>
+              {errors1.general}
+            </Typography>
+          )}
           <Button
             type='submit'
             fullWidth
@@ -144,12 +168,18 @@ function SignIn(props) {
     </Container>
   );
 }
-const mapStateToProps = (state) => {
-  return {
-    state
-  };
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI
+});
+
+SignIn.propTypes = {
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired
 };
 
-// const mapDispatchToProps = (dispatch) => {};
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ loginUser }, dispatch);
+};
 
-export default connect(mapStateToProps, null)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

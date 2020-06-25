@@ -7,8 +7,7 @@
     "@material-ui/icons": "^4.9.1",
     "axios": "^0.19.2",
     "cra-template": "1.0.3",
-    "formik": "^2.1.4",
-    "formik-material-ui": "^2.0.0-beta.1",
+    "dayjs": "^1.8.28",
     "jwt-decode": "^2.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -40,5 +39,7 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://us-central1-fakebook-3d144.cloudfunctions.net/api",
+  "secure": false
 }

@@ -2,16 +2,18 @@ import { combineReducers, applyMiddleware, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { logger } from 'redux-logger';
 
-import { AuthReducer } from './authReducer';
-import { PostReducer } from './postReducer';
+import userReducer from './userReducer';
+import dataReducer from './dataReducer';
+import uiReducer from './uiReducer';
 
 const initalState = {};
-const rootReducer = combineReducers({
-  AuthReducer,
-  PostReducer
-});
-
 const middlewares = [thunk];
+
+const rootReducer = combineReducers({
+  user: userReducer,
+  data: dataReducer,
+  UI: uiReducer
+});
 
 if (process.env.NODE_ENV === `development`) {
   middlewares.push(logger);
